@@ -11,7 +11,7 @@
 
 - Uses `/Mango/` as the default sandbox root directory, but exposes a public configuration entry for the host app
 - Creates the same default subdirectories on initialization
-- Depends on `MHLog`
+- Depends on `MahaLogCore`
 
 ## Configuration
 

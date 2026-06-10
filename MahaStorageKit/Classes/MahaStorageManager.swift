@@ -4,7 +4,7 @@
 //
 
 import Foundation
-import MHLog
+import MahaLogCore
 
 public final class MahaStorageManager {
     private static let defaultRootDirectoryName = "/Mango/"
@@ -64,7 +64,7 @@ public final class MahaStorageManager {
             do {
                 try fileManager.createDirectory(atPath: directoryPath, withIntermediateDirectories: true)
             } catch {
-                // MHLog.error("创建文件夹失败=\(directoryPath) err = \(error)")
+                // MahaLog.recordError("创建文件夹失败=\(directoryPath) err = \(error)")
             }
         }
     }
@@ -102,7 +102,7 @@ public final class MahaStorageManager {
         do {
             try fileManager.removeItem(atPath: path)
         } catch {
-            // MHLog.log("deleteFile失败=\(error)")
+            // MahaLog.record("deleteFile失败=\(error)")
         }
     }
 
