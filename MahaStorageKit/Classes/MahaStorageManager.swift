@@ -7,6 +7,9 @@ import Foundation
 import MHLog
 
 public final class MahaStorageManager {
+    private static let defaultRootDirectoryName = "/Mango/"
+    public private(set) static var rootDirectoryName = defaultRootDirectoryName
+
     public enum Directory: String, CaseIterable {
         case normal = "normal/"
         case animation = "animation/"
@@ -19,18 +22,39 @@ public final class MahaStorageManager {
         case theme = "theme/"
     }
 
-    public static let shared = MahaStorageManager()
+    public static let shared = MahaStorageManager(rootDirectoryName: defaultRootDirectoryName)
+
+    public static func configure(rootDirectoryName: String) {
+        let normalizedRootDirectoryName = normalizeRootDirectoryName(rootDirectoryName)
+        self.rootDirectoryName = normalizedRootDirectoryName
+        shared.updateRootDirectoryName(normalizedRootDirectoryName)
+    }
 
     private let fileManager = FileManager.default
-    private var rootDirectory = "/Mango/"
+    private var rootDirectoryName: String
+    private var rootDirectoryPath = ""
 
-    private init() {
+    private init(rootDirectoryName: String) {
+        self.rootDirectoryName = Self.normalizeRootDirectoryName(rootDirectoryName)
+        reloadRootDirectoryPath()
+    }
+
+    public var currentRootDirectoryPath: String {
+        rootDirectoryPath
+    }
+
+    private func updateRootDirectoryName(_ rootDirectoryName: String) {
+        self.rootDirectoryName = rootDirectoryName
+        reloadRootDirectoryPath()
+    }
+
+    private func reloadRootDirectoryPath() {
         let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
         let documentDirectory = paths.first ?? ""
-        rootDirectory = documentDirectory + rootDirectory
+        rootDirectoryPath = documentDirectory + rootDirectoryName
 
         Directory.allCases.forEach { directory in
-            createDirectory(at: rootDirectory + directory.rawValue)
+            createDirectory(at: rootDirectoryPath + directory.rawValue)
         }
     }
 
@@ -53,7 +77,7 @@ public final class MahaStorageManager {
 
     /// 获取文件完整路径
     public func filePath(for fileName: String, in directory: Directory = .normal) -> String {
-        rootDirectory + directory.rawValue + fileName
+        rootDirectoryPath + directory.rawValue + fileName
     }
 
     public func fileExists(atFullPath fullPath: String) -> Bool {
@@ -63,7 +87,7 @@ public final class MahaStorageManager {
 
     /// 获取类型目录
     public func directoryPath(for directory: Directory) -> String {
-        rootDirectory + directory.rawValue
+        rootDirectoryPath + directory.rawValue
     }
 
     /// 获取目录下所有文件名
@@ -87,5 +111,21 @@ public final class MahaStorageManager {
             return originalPath.replacingOccurrences(of: "file://", with: "")
         }
         return originalPath
+    }
+
+    private static func normalizeRootDirectoryName(_ rootDirectoryName: String) -> String {
+        let trimmedRootDirectoryName = rootDirectoryName.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard trimmedRootDirectoryName.isEmpty == false else {
+            return defaultRootDirectoryName
+        }
+
+        var normalizedRootDirectoryName = trimmedRootDirectoryName
+        if normalizedRootDirectoryName.hasPrefix("/") == false {
+            normalizedRootDirectoryName = "/" + normalizedRootDirectoryName
+        }
+        if normalizedRootDirectoryName.hasSuffix("/") == false {
+            normalizedRootDirectoryName += "/"
+        }
+        return normalizedRootDirectoryName
     }
 }
