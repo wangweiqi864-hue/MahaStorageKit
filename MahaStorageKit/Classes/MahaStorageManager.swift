@@ -7,7 +7,7 @@ import Foundation
 import MahaLogCore
 
 public final class MahaStorageManager {
-    private static let defaultRootDirectoryName = "/Mango/"
+    private static let defaultRootDirectoryName = "/Maha/"
     public private(set) static var rootDirectoryName = defaultRootDirectoryName
 
     public enum Directory: String, CaseIterable {
