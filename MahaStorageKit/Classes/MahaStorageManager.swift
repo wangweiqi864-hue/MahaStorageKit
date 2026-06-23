@@ -38,6 +38,14 @@ public extension MahaStorageManager {
         shared.updateRootDirectory(to: rootDirectoryName)
     }
 
+    func createBaseDir() {
+        prepareDefaultDirectories()
+    }
+
+    func createDirectory(at directoryPath: String) {
+        fileSystem.createDirectoryIfNeeded(atPath: directoryPath)
+    }
+
     /// 判断文件是否存在
     func fileExists(named fileName: String, in directory: Directory = .normal) -> Bool {
         fileSystem.fileExists(atPath: storageLayout.filePath(for: fileName, in: directory))
