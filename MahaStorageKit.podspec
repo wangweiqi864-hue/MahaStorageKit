@@ -17,5 +17,4 @@ It keeps the current sandbox directory behavior while exposing renamed public AP
   s.swift_version = '5.0'
 
   s.source_files = 'MahaStorageKit/Classes/**/*'
-  s.dependency 'MahaLogCore'
 end
