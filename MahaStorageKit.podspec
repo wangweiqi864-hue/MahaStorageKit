@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'MahaStorageKit'
-  s.version          = '0.1.6'
+  s.version          = '0.1.7'
   s.summary          = 'A lightweight sandbox file storage utility used by the app.'
 
   s.description      = <<-DESC
@@ -17,4 +17,5 @@ It keeps the current sandbox directory behavior while exposing renamed public AP
   s.swift_version = '5.0'
 
   s.source_files = 'MahaStorageKit/Classes/**/*'
+  s.resources = 'MahaStorageKit/PrivacyInfo.xcprivacy'
 end
